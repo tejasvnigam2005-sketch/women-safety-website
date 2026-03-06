@@ -629,7 +629,12 @@ function toggleListening() {
 
 function startListening() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        showToast('Voice recognition is not supported in this browser. Try Chrome.', 'warning');
+        showToast('Voice recognition is not supported in this browser. Please use Google Chrome.', 'warning');
+        return;
+    }
+
+    if (!cameraStream) {
+        showToast('Please enable Camera & Mic first before starting voice listening.', 'warning');
         return;
     }
 
@@ -638,6 +643,7 @@ function startListening() {
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
+    recognition.maxAlternatives = 1;
 
     const listenBtn = document.getElementById('startListening');
     const voiceIndicator = document.getElementById('voiceIndicator');
@@ -648,6 +654,7 @@ function startListening() {
         isListening = true;
         voiceIndicator.style.display = 'flex';
         detectedText.style.display = 'block';
+        speechOutput.textContent = 'Listening...';
         listenBtn.innerHTML = `
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="1" y1="1" x2="23" y2="23"/>
@@ -683,26 +690,55 @@ function startListening() {
     };
 
     recognition.onerror = (event) => {
-        if (event.error === 'no-speech') return; // Ignore no-speech
         console.error('Recognition error:', event.error);
+        if (event.error === 'no-speech') return;
+        if (event.error === 'not-allowed') {
+            showToast('Microphone access denied. Please allow microphone permission in browser settings.', 'danger');
+            isListening = false;
+            return;
+        }
+        if (event.error === 'network') {
+            showToast('Network error with speech recognition. Check your internet connection.', 'warning');
+            return;
+        }
         showToast('Voice recognition error: ' + event.error, 'warning');
     };
 
     recognition.onend = () => {
         // Auto-restart if still supposed to listen
         if (isListening) {
-            try {
-                recognition.start();
-            } catch (e) {
-                console.log('Recognition restart failed:', e);
-            }
+            setTimeout(() => {
+                if (isListening && recognition) {
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        // Create a fresh instance if the old one is dead
+                        console.log('Recreating recognition instance...');
+                        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+                        const oldOnResult = recognition.onresult;
+                        const oldOnError = recognition.onerror;
+                        const oldOnEnd = recognition.onend;
+                        const oldOnStart = recognition.onstart;
+                        recognition = new SR();
+                        recognition.continuous = true;
+                        recognition.interimResults = true;
+                        recognition.lang = 'en-US';
+                        recognition.onstart = oldOnStart;
+                        recognition.onresult = oldOnResult;
+                        recognition.onerror = oldOnError;
+                        recognition.onend = oldOnEnd;
+                        recognition.start();
+                    }
+                }
+            }, 300);
         }
     };
 
     try {
         recognition.start();
     } catch (e) {
-        showToast('Could not start voice recognition', 'danger');
+        console.error('Failed to start recognition:', e);
+        showToast('Could not start voice recognition. Make sure you are using Chrome and microphone is enabled.', 'danger');
     }
 }
 
@@ -729,23 +765,47 @@ function stopListening() {
     showToast('Voice recognition stopped', 'info');
 }
 
+function getSupportedMimeType() {
+    const types = [
+        'video/webm;codecs=vp9,opus',
+        'video/webm;codecs=vp8,opus',
+        'video/webm;codecs=vp9',
+        'video/webm;codecs=vp8',
+        'video/webm',
+        'video/mp4;codecs=h264',
+        'video/mp4',
+        ''
+    ];
+    for (const type of types) {
+        if (type === '' || MediaRecorder.isTypeSupported(type)) {
+            return type;
+        }
+    }
+    return '';
+}
+
 function startRecording() {
-    if (!cameraStream || isRecording) return;
+    if (isRecording) {
+        showToast('Already recording!', 'warning');
+        return;
+    }
+
+    if (!cameraStream) {
+        showToast('Please enable Camera & Mic first before recording.', 'warning');
+        return;
+    }
 
     recordedChunks = [];
+    const mimeType = getSupportedMimeType();
     
     try {
-        mediaRecorder = new MediaRecorder(cameraStream, {
-            mimeType: 'video/webm;codecs=vp9'
-        });
+        const options = mimeType ? { mimeType } : undefined;
+        mediaRecorder = new MediaRecorder(cameraStream, options);
+        console.log('[SafeHer] MediaRecorder using:', mimeType || 'browser default');
     } catch (e) {
-        try {
-            mediaRecorder = new MediaRecorder(cameraStream, {
-                mimeType: 'video/webm'
-            });
-        } catch (e2) {
-            mediaRecorder = new MediaRecorder(cameraStream);
-        }
+        console.error('MediaRecorder creation failed:', e);
+        showToast('Recording is not supported in this browser. Try Chrome or Firefox.', 'danger');
+        return;
     }
 
     mediaRecorder.ondataavailable = (event) => {
@@ -755,8 +815,16 @@ function startRecording() {
     };
 
     mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: 'video/webm' });
-        saveRecording(blob);
+        const blobType = mediaRecorder.mimeType || 'video/webm';
+        const blob = new Blob(recordedChunks, { type: blobType });
+        saveRecording(blob, blobType);
+    };
+
+    mediaRecorder.onerror = (event) => {
+        console.error('MediaRecorder error:', event.error);
+        showToast('Recording error occurred. Please try again.', 'danger');
+        isRecording = false;
+        document.getElementById('recordingIndicator').style.display = 'none';
     };
 
     mediaRecorder.start(1000); // Collect data every second
@@ -793,6 +861,10 @@ function stopRecording() {
 }
 
 function toggleManualRecord() {
+    if (!cameraStream) {
+        showToast('Please enable Camera & Mic first before recording.', 'warning');
+        return;
+    }
     if (isRecording) {
         stopRecording();
     } else {
@@ -800,9 +872,10 @@ function toggleManualRecord() {
     }
 }
 
-function saveRecording(blob) {
+function saveRecording(blob, mimeType) {
     const timestamp = new Date().toLocaleString();
     const url = URL.createObjectURL(blob);
+    const ext = mimeType && mimeType.includes('mp4') ? 'mp4' : 'webm';
 
     const container = document.getElementById('recordingsContainer');
     
@@ -815,10 +888,11 @@ function saveRecording(blob) {
     item.innerHTML = `
         <span class="rec-name">📹 Recording</span>
         <span class="rec-time">${timestamp}</span>
-        <a class="rec-download" href="${url}" download="SafeHer_Recording_${Date.now()}.webm">Download</a>
+        <a class="rec-download" href="${url}" download="SafeHer_Recording_${Date.now()}.${ext}">Download</a>
     `;
 
     container.insertBefore(item, container.firstChild);
+    showToast('Recording saved! Click Download to save the file.', 'success');
 }
 
 function addTriggerWord() {
