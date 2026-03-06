@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SafeHer - Women Safety App with SOS, Live Tracking, and Emergency Camera features. Stay safe, stay connected.">
+    <meta name="keywords" content="women safety, SOS, emergency, live tracking, safety app">
+    <title>SafeHer — Women Safety Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <div class="logo-icon">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <path d="M14 2L16.5 8.5L23 6L20 12.5L26 14L20 15.5L23 22L16.5 19.5L14 26L11.5 19.5L5 22L8 15.5L2 14L8 12.5L5 6L11.5 8.5L14 2Z" fill="url(#shield-gradient)" />
+                        <defs>
+                            <linearGradient id="shield-gradient" x1="2" y1="2" x2="26" y2="26">
+                                <stop stop-color="#E879A8"/>
+                                <stop offset="1" stop-color="#A855F7"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">Safe<span class="logo-accent">Her</span></span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#sos" class="nav-link">SOS</a>
+                <a href="#tracking" class="nav-link">Live Track</a>
+                <a href="#camera" class="nav-link">Camera</a>
+                <a href="#contacts" class="nav-link">Contacts</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                <span>Your Safety, Our Priority</span>
+            </div>
+            <h1 class="hero-title">
+                Empowering Women<br>
+                <span class="gradient-text">With Safety Tech</span>
+            </h1>
+            <p class="hero-description">
+                SafeHer provides instant SOS alerts, real-time location tracking, and smart camera activation 
+                to keep you protected. Because every woman deserves to feel safe.
+            </p>
+            <div class="hero-actions">
+                <a href="#sos" class="btn btn-primary" id="heroSosBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    Activate SOS
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    Explore Features
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" data-target="24">0</span><span class="stat-suffix">/7</span>
+                    <span class="stat-label">Protection</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number" data-target="3">0</span><span class="stat-suffix">sec</span>
+                    <span class="stat-label">SOS Response</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number" data-target="100">0</span><span class="stat-suffix">%</span>
+                    <span class="stat-label">Privacy</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="shield-container">
+                <div class="shield-ring ring-1"></div>
+                <div class="shield-ring ring-2"></div>
+                <div class="shield-ring ring-3"></div>
+                <div class="shield-core">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="url(#shield-stroke)" stroke-width="1.5">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M9 12l2 2 4-4" stroke="url(#shield-stroke)" stroke-width="2"/>
+                        <defs>
+                            <linearGradient id="shield-stroke" x1="4" y1="2" x2="20" y2="22">
+                                <stop stop-color="#E879A8"/>
+                                <stop offset="1" stop-color="#A855F7"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">Features</span>
+                <h2 class="section-title">Safety at Your <span class="gradient-text">Fingertips</span></h2>
+                <p class="section-subtitle">Comprehensive safety tools designed specifically for women's protection</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-feature="sos">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </div>
+                    <h3>SOS Emergency Signal</h3>
+                    <p>One-tap panic button that instantly alerts your emergency contacts with your live location via SMS and email.</p>
+                    <a href="#sos" class="feature-link">Try Now →</a>
+                </div>
+                <div class="feature-card" data-feature="tracking">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="3"/>
+                            <line x1="12" y1="2" x2="12" y2="6"/>
+                            <line x1="12" y1="18" x2="12" y2="22"/>
+                            <line x1="2" y1="12" x2="6" y2="12"/>
+                            <line x1="18" y1="12" x2="22" y2="12"/>
+                        </svg>
+                    </div>
+                    <h3>Live Location Tracking</h3>
+                    <p>Share your real-time location with trusted contacts. They can track your journey and ensure you reach safely.</p>
+                    <a href="#tracking" class="feature-link">Try Now →</a>
+                </div>
+                <div class="feature-card" data-feature="camera">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                    </div>
+                    <h3>Smart Camera Trigger</h3>
+                    <p>Voice-activated camera that starts recording when you say trigger words like "SOS" or "Help me". Evidence captured instantly.</p>
+                    <a href="#camera" class="feature-link">Try Now →</a>
+                </div>
+                <div class="feature-card" data-feature="contacts">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3>Emergency Contacts</h3>
+                    <p>Manage your trusted contacts who will be notified during emergencies. Add family, friends, or local authorities.</p>
+                    <a href="#contacts" class="feature-link">Try Now →</a>
+                </div>
+                <div class="feature-card" data-feature="siren">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        </svg>
+                    </div>
+                    <h3>Emergency Siren</h3>
+                    <p>Activate a loud siren sound to attract attention and deter potential threats in dangerous situations.</p>
+                    <a href="#sos" class="feature-link">Try Now →</a>
+                </div>
+                <div class="feature-card" data-feature="safe-route">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="10" r="3"/>
+                            <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"/>
+                        </svg>
+                    </div>
+                    <h3>Fake Call Generator</h3>
+                    <p>Generate a realistic fake incoming call to escape uncomfortable situations discreetly.</p>
+                    <a href="#" class="feature-link" id="fakeCallLink">Try Now →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOS Section -->
+    <section class="sos-section" id="sos">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag section-tag-danger">Emergency</span>
+                <h2 class="section-title">SOS <span class="gradient-text-danger">Emergency Signal</span></h2>
+                <p class="section-subtitle">Press the SOS button to instantly alert your emergency contacts with your location</p>
+            </div>
+            <div class="sos-content">
+                <div class="sos-panel">
+                    <div class="sos-button-container">
+                        <div class="sos-ripple ripple-1"></div>
+                        <div class="sos-ripple ripple-2"></div>
+                        <div class="sos-ripple ripple-3"></div>
+                        <button class="sos-button" id="sosButton" aria-label="Activate SOS">
+                            <span class="sos-text">SOS</span>
+                            <span class="sos-subtext">HOLD 3 SEC</span>
+                        </button>
+                    </div>
+                    <div class="sos-status" id="sosStatus">
+                        <div class="status-indicator"></div>
+                        <span>System Ready</span>
+                    </div>
+                    <div class="sos-countdown" id="sosCountdown" style="display:none;">
+                        <span class="countdown-number" id="countdownNumber">3</span>
+                        <span class="countdown-text">Sending alert in...</span>
+                    </div>
+                    <div class="sos-alert-sent" id="sosAlertSent" style="display:none;">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <h3>Alert Sent Successfully!</h3>
+                        <p>Your emergency contacts have been notified with your location.</p>
+                    </div>
+                </div>
+                <div class="sos-info">
+                    <div class="info-card">
+                        <div class="info-icon">📍</div>
+                        <div>
+                            <h4>Location Shared</h4>
+                            <p>Your live GPS coordinates are sent to all emergency contacts</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">📱</div>
+                        <div>
+                            <h4>SMS & Notification</h4>
+                            <p>Emergency contacts receive instant SMS with your distress signal</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🔊</div>
+                        <div>
+                            <h4>Siren Activation</h4>
+                            <p>Optional loud siren sound to attract nearby attention</p>
+                        </div>
+                    </div>
+                    <div class="siren-toggle">
+                        <label class="toggle-label">
+                            <span>Enable Siren with SOS</span>
+                            <input type="checkbox" id="sirenToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Tracking Section -->
+    <section class="tracking-section" id="tracking">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">Location</span>
+                <h2 class="section-title">Live <span class="gradient-text">Location Tracking</span></h2>
+                <p class="section-subtitle">Share your real-time location with trusted contacts for safe journeys</p>
+            </div>
+            <div class="tracking-content">
+                <div class="map-container">
+                    <div id="map" class="live-map"></div>
+                    <div class="map-overlay" id="mapOverlay">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="10" r="3"/>
+                            <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"/>
+                        </svg>
+                        <p>Click "Start Tracking" to view your live location</p>
+                    </div>
+                </div>
+                <div class="tracking-controls">
+                    <div class="location-info" id="locationInfo">
+                        <div class="coords">
+                            <div class="coord-item">
+                                <span class="coord-label">Latitude</span>
+                                <span class="coord-value" id="latValue">--</span>
+                            </div>
+                            <div class="coord-item">
+                                <span class="coord-label">Longitude</span>
+                                <span class="coord-value" id="lngValue">--</span>
+                            </div>
+                            <div class="coord-item">
+                                <span class="coord-label">Accuracy</span>
+                                <span class="coord-value" id="accValue">--</span>
+                            </div>
+                            <div class="coord-item">
+                                <span class="coord-label">Last Updated</span>
+                                <span class="coord-value" id="timeValue">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tracking-actions">
+                        <button class="btn btn-primary btn-full" id="startTracking">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            Start Tracking
+                        </button>
+                        <button class="btn btn-secondary btn-full" id="shareLocation" disabled>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="18" cy="5" r="3"/>
+                                <circle cx="6" cy="12" r="3"/>
+                                <circle cx="18" cy="19" r="3"/>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                            </svg>
+                            Share Location
+                        </button>
+                    </div>
+                    <div class="share-status" id="shareStatus" style="display: none;">
+                        <div class="status-indicator status-active"></div>
+                        <span>Location sharing is active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Camera Section -->
+    <section class="camera-section" id="camera">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">Smart Camera</span>
+                <h2 class="section-title">Voice-Activated <span class="gradient-text">Camera Trigger</span></h2>
+                <p class="section-subtitle">Say trigger words like "SOS", "Help me", or "Emergency" to automatically start recording</p>
+            </div>
+            <div class="camera-content">
+                <div class="camera-preview-container">
+                    <video id="cameraFeed" class="camera-feed" autoplay playsinline muted></video>
+                    <div class="camera-overlay" id="cameraOverlay">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                        <p>Enable camera to start voice-activated recording</p>
+                    </div>
+                    <div class="recording-indicator" id="recordingIndicator" style="display:none;">
+                        <span class="rec-dot"></span>
+                        <span>REC</span>
+                    </div>
+                    <div class="voice-indicator" id="voiceIndicator" style="display:none;">
+                        <div class="voice-bars">
+                            <div class="voice-bar"></div>
+                            <div class="voice-bar"></div>
+                            <div class="voice-bar"></div>
+                            <div class="voice-bar"></div>
+                            <div class="voice-bar"></div>
+                        </div>
+                        <span>Listening...</span>
+                    </div>
+                </div>
+                <div class="camera-controls">
+                    <div class="trigger-words">
+                        <h4>Trigger Words</h4>
+                        <div class="word-list">
+                            <span class="trigger-word">SOS</span>
+                            <span class="trigger-word">Help me</span>
+                            <span class="trigger-word">Emergency</span>
+                            <span class="trigger-word">Bachao</span>
+                            <span class="trigger-word">Save me</span>
+                        </div>
+                        <div class="add-word-container">
+                            <input type="text" id="newTriggerWord" placeholder="Add custom trigger word..." class="input-field">
+                            <button class="btn btn-small" id="addWordBtn">Add</button>
+                        </div>
+                    </div>
+                    <div class="camera-actions">
+                        <button class="btn btn-primary btn-full" id="enableCamera">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                <circle cx="12" cy="13" r="4"/>
+                            </svg>
+                            Enable Camera & Mic
+                        </button>
+                        <button class="btn btn-secondary btn-full" id="startListening" disabled>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                <line x1="12" y1="19" x2="12" y2="23"/>
+                                <line x1="8" y1="23" x2="16" y2="23"/>
+                            </svg>
+                            Start Voice Listening
+                        </button>
+                        <button class="btn btn-danger btn-full" id="manualRecord" disabled>
+                            <span class="rec-dot-btn"></span>
+                            Manual Record
+                        </button>
+                    </div>
+                    <div class="detected-text" id="detectedText" style="display:none;">
+                        <h4>Detected Speech</h4>
+                        <p id="speechOutput" class="speech-output"></p>
+                    </div>
+                    <div class="recordings-list" id="recordingsList">
+                        <h4>Saved Recordings</h4>
+                        <div id="recordingsContainer" class="recordings-container">
+                            <p class="no-recordings">No recordings yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Contacts Section -->
+    <section class="contacts-section" id="contacts">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">Contacts</span>
+                <h2 class="section-title">Emergency <span class="gradient-text">Contacts</span></h2>
+                <p class="section-subtitle">Add your trusted contacts who will be notified in case of emergencies</p>
+            </div>
+            <div class="contacts-content">
+                <div class="add-contact-form">
+                    <h3>Add New Contact</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="contactName">Name</label>
+                            <input type="text" id="contactName" placeholder="Enter name" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPhone">Phone Number</label>
+                            <input type="tel" id="contactPhone" placeholder="+91 XXXXX XXXXX" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactRelation">Relation</label>
+                            <select id="contactRelation" class="input-field">
+                                <option value="">Select relation</option>
+                                <option value="parent">Parent</option>
+                                <option value="sibling">Sibling</option>
+                                <option value="spouse">Spouse</option>
+                                <option value="friend">Friend</option>
+                                <option value="colleague">Colleague</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="addContactBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add Contact
+                    </button>
+                </div>
+                <div class="contacts-list" id="contactsList">
+                    <h3>Your Emergency Contacts</h3>
+                    <div id="contactsContainer" class="contacts-container">
+                        <!-- Contacts dynamically added here -->
+                    </div>
+                    <div class="helpline-numbers">
+                        <h4>Important Helpline Numbers</h4>
+                        <div class="helpline-grid">
+                            <div class="helpline-card">
+                                <span class="helpline-name">Women Helpline</span>
+                                <a href="tel:181" class="helpline-number">181</a>
+                            </div>
+                            <div class="helpline-card">
+                                <span class="helpline-name">Police</span>
+                                <a href="tel:100" class="helpline-number">100</a>
+                            </div>
+                            <div class="helpline-card">
+                                <span class="helpline-name">Ambulance</span>
+                                <a href="tel:102" class="helpline-number">102</a>
+                            </div>
+                            <div class="helpline-card">
+                                <span class="helpline-name">NCW Helpline</span>
+                                <a href="tel:7827-170-170" class="helpline-number">7827-170-170</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fake Call Modal -->
+    <div class="modal-overlay" id="fakeCallModal" style="display:none;">
+        <div class="fake-call-screen">
+            <div class="call-avatar">
+                <div class="avatar-circle">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+            </div>
+            <h2 class="caller-name" id="callerName">Mom</h2>
+            <p class="call-status" id="callStatus">Incoming Call...</p>
+            <div class="call-timer" id="callTimer" style="display:none;">00:00</div>
+            <div class="call-actions-modal">
+                <button class="call-btn decline-btn" id="declineCall">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+                        <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/>
+                        <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                </button>
+                <button class="call-btn accept-btn" id="acceptCall">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="nav-logo">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+                            <path d="M14 2L16.5 8.5L23 6L20 12.5L26 14L20 15.5L23 22L16.5 19.5L14 26L11.5 19.5L5 22L8 15.5L2 14L8 12.5L5 6L11.5 8.5L14 2Z" fill="url(#footer-gradient)" />
+                            <defs>
+                                <linearGradient id="footer-gradient" x1="2" y1="2" x2="26" y2="26">
+                                    <stop stop-color="#E879A8"/>
+                                    <stop offset="1" stop-color="#A855F7"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span class="logo-text">Safe<span class="logo-accent">Her</span></span>
+                </div>
+                <p>Empowering women with technology for a safer world. Your safety is our priority.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="#home">Home</a>
+                    <a href="#features">Features</a>
+                    <a href="#sos">SOS</a>
+                    <a href="#tracking">Tracking</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Emergency</h4>
+                    <a href="tel:181">Women Helpline: 181</a>
+                    <a href="tel:100">Police: 100</a>
+                    <a href="tel:102">Ambulance: 102</a>
+                    <a href="tel:112">Emergency: 112</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 SafeHer. Made with ❤️ for women's safety.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
